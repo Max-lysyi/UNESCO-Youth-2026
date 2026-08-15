@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, XCircle, ChevronDown } from 'lucide-react'
+import { CheckCircle, XCircle, ChevronDown, X } from 'lucide-react'
 import type { NewsPost } from '../data/posts'
 import { cn } from '../lib/utils'
 
@@ -9,9 +9,10 @@ interface ResultModalProps {
   post: NewsPost
   pointsEarned: number
   onNext: () => void
+  onClose: () => void
 }
 
-export function ResultModal({ isOpen, isCorrect, post, pointsEarned, onNext }: ResultModalProps) {
+export function ResultModal({ isOpen, isCorrect, post, pointsEarned, onNext, onClose }: ResultModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -51,28 +52,32 @@ export function ResultModal({ isOpen, isCorrect, post, pointsEarned, onNext }: R
                 )}
               />
 
-              {/* Handle */}
-              <div className="mx-auto mb-6 h-1 w-10 rounded-full bg-white/20" />
+              {/* Handle bar */}
+              <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-white/20" />
+
+              {/* Close (X) button — top right */}
+              <motion.button
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
+                onClick={onClose}
+                className="absolute top-6 right-5 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/60 ring-1 ring-white/15 active:bg-white/20"
+                aria-label="Close result"
+              >
+                <X size={15} strokeWidth={2.5} />
+              </motion.button>
 
               {/* Result icon */}
               <div className="mb-4 flex justify-center">
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.15 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
                 >
                   {isCorrect ? (
-                    <CheckCircle
-                      size={64}
-                      className="text-[oklch(72%_0.2_150)]"
-                      strokeWidth={1.5}
-                    />
+                    <CheckCircle size={64} className="text-[oklch(72%_0.2_150)]" strokeWidth={1.5} />
                   ) : (
-                    <XCircle
-                      size={64}
-                      className="text-[oklch(68%_0.22_25)]"
-                      strokeWidth={1.5}
-                    />
+                    <XCircle size={64} className="text-[oklch(68%_0.22_25)]" strokeWidth={1.5} />
                   )}
                 </motion.div>
               </div>
@@ -81,18 +86,18 @@ export function ResultModal({ isOpen, isCorrect, post, pointsEarned, onNext }: R
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
+                transition={{ delay: 0.2 }}
                 className="flex flex-col items-center gap-3"
               >
                 <h2 className="text-2xl font-black text-white">
-                  {isCorrect ? '✅ Правильно!' : '❌ Невірно!'}
+                  {isCorrect ? '✅ Correct!' : '❌ Wrong!'}
                 </h2>
 
                 {/* Points earned */}
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.35, type: 'spring', stiffness: 300 }}
+                  transition={{ delay: 0.3, type: 'spring', stiffness: 300 }}
                   className={cn(
                     'rounded-2xl px-5 py-2 text-sm font-bold',
                     isCorrect
@@ -100,28 +105,26 @@ export function ResultModal({ isOpen, isCorrect, post, pointsEarned, onNext }: R
                       : 'bg-[oklch(58%_0.24_25/0.2)] text-[oklch(68%_0.22_25)] ring-1 ring-[oklch(58%_0.24_25/0.35)]',
                   )}
                 >
-                  {isCorrect ? `+${pointsEarned} балів 🎉` : '+0 балів'}
+                  {isCorrect ? `+${pointsEarned} pts 🎉` : '+0 pts'}
                 </motion.div>
 
                 {/* Explanation */}
-                <div className="mt-2 rounded-2xl bg-white/8 p-4 ring-1 ring-white/10">
+                <div className="mt-1 rounded-2xl bg-white/8 p-4 ring-1 ring-white/10">
                   <p className="text-center text-xs font-medium leading-relaxed text-white/75">
                     {post.explanation}
                   </p>
                 </div>
 
-                {/* Actual verdict badge */}
+                {/* Correct verdict badge */}
                 <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5">
-                  <span className="text-xs text-white/50">Правильна відповідь:</span>
+                  <span className="text-xs text-white/50">Correct answer:</span>
                   <span
                     className={cn(
                       'text-xs font-bold uppercase tracking-wide',
-                      post.verdict === 'fact'
-                        ? 'text-[oklch(72%_0.2_150)]'
-                        : 'text-[oklch(68%_0.22_25)]',
+                      !post.isFake ? 'text-[oklch(72%_0.2_150)]' : 'text-[oklch(68%_0.22_25)]',
                     )}
                   >
-                    {post.verdict === 'fact' ? '✓ Факт' : '✗ Фейк'}
+                    {!post.isFake ? '✓ Fact' : '✗ Fake'}
                   </span>
                 </div>
               </motion.div>
@@ -137,7 +140,7 @@ export function ResultModal({ isOpen, isCorrect, post, pointsEarned, onNext }: R
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-white/15 py-4 text-sm font-bold text-white ring-1 ring-white/20 active:bg-white/20"
               >
                 <ChevronDown size={18} />
-                Наступна новина
+                Next Story
               </motion.button>
             </div>
           </motion.div>

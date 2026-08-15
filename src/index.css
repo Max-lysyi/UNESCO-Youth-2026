@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ── Class-based dark mode for Tailwind v4 ──────────────────────────────────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-50: oklch(97% 0.03 240);
   --color-brand-100: oklch(92% 0.07 240);
@@ -20,53 +23,91 @@
   --color-wrong-500: oklch(58% 0.24 25);
   --color-wrong-600: oklch(48% 0.22 25);
 
-  --color-surface-50: oklch(98% 0.005 240);
-  --color-surface-100: oklch(94% 0.01 240);
-  --color-surface-800: oklch(18% 0.02 240);
-  --color-surface-900: oklch(12% 0.02 240);
-  --color-surface-950: oklch(8% 0.015 240);
-
   --font-sans: 'Inter', system-ui, sans-serif;
-
   --radius-card: 1.5rem;
   --shadow-card: 0 8px 32px oklch(0% 0 0 / 0.35);
   --shadow-glow-green: 0 0 30px oklch(62% 0.22 150 / 0.5);
   --shadow-glow-red: 0 0 30px oklch(58% 0.24 25 / 0.5);
 }
 
+/* ── Theme CSS Custom Properties ────────────────────────────────────────────── */
+/* Light mode = default */
+:root {
+  --c-bg:         oklch(96.5% 0.007 240);
+  --c-surface:    oklch(100% 0 0);
+  --c-surface-2:  oklch(92% 0.009 240);
+  --c-surface-3:  oklch(87% 0.012 240);
+  --c-text:       oklch(11% 0.02 240);
+  --c-text-2:     oklch(38% 0.015 240);
+  --c-text-3:     oklch(58% 0.01 240);
+  --c-divider:    oklch(82% 0.012 240);
+  --c-glass-bg:   oklch(99% 0.005 240 / 0.85);
+  --c-glass-border: oklch(78% 0.015 240 / 0.6);
+  --c-sheet-bg:   oklch(100% 0 0);
+  --c-input-bg:   oklch(91% 0.01 240);
+  --c-input-ring: oklch(80% 0.015 240);
+}
+
+/* Dark mode */
+.dark {
+  --c-bg:         oklch(5% 0.01 240);
+  --c-surface:    oklch(10% 0.02 240);
+  --c-surface-2:  oklch(14% 0.02 240);
+  --c-surface-3:  oklch(18% 0.02 240);
+  --c-text:       oklch(97% 0 0);
+  --c-text-2:     oklch(72% 0 0);
+  --c-text-3:     oklch(50% 0 0);
+  --c-divider:    oklch(100% 0 0 / 0.12);
+  --c-glass-bg:   oklch(6% 0.015 240 / 0.95);
+  --c-glass-border: oklch(100% 0 0 / 0.1);
+  --c-sheet-bg:   oklch(11% 0.02 240);
+  --c-input-bg:   oklch(15% 0.02 240);
+  --c-input-ring: oklch(100% 0 0 / 0.1);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-html, body, #root {
+html, body {
   height: 100%;
   height: 100dvh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background: var(--color-surface-950);
-  color: white;
+  /* Desktop background — the "mat" behind the phone-width card */
+  background: #171717; /* neutral-900 */
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
-/* Scroll snap feed container */
-.feed-container {
+#root {
+  height: 100%;
   height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Scroll snap feed container ─────────────────────────────────────────────── */
+.feed-container {
+  height: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .feed-container::-webkit-scrollbar {
   display: none;
 }
 
-/* Each card snaps to full viewport height */
+/* Each card snaps to full container height */
 .feed-card {
-  height: 100dvh;
+  height: 100%;
+  min-height: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   position: relative;
@@ -75,16 +116,15 @@ html, body, #root {
 
 /* Glassmorphism utility */
 .glass {
-  background: oklch(100% 0 0 / 0.07);
+  background: var(--c-glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid oklch(100% 0 0 / 0.12);
+  border: 1px solid var(--c-glass-border);
 }
 
 /* Hide scrollbar cross-browser */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  scrollbar-width: none;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* Tab indicator transition helper */
+.tab-panel { will-change: transform; }

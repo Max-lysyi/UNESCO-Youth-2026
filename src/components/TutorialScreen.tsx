@@ -5,18 +5,18 @@ import { useAppStore } from '../store/useAppStore'
 const tutorialSteps = [
   {
     emoji: '📰',
-    text: 'Читай новину на екрані.',
-    hint: 'Уважно аналізуй заголовок та деталі',
+    text: 'Read the story on screen.',
+    hint: 'Analyze the headline and details carefully',
   },
   {
     emoji: '👆',
-    text: "Тисни 'Вірю' або 'Не вірю'.",
-    hint: 'Довіряй своїй інтуїції та критичному мисленню',
+    text: "Tap 'Fact' or 'Fake'.",
+    hint: 'Trust your critical thinking and intuition',
   },
   {
     emoji: '⭐',
-    text: 'Заробляй бали за правильні відповіді. Твій рахунок буде вгорі екрана!',
-    hint: 'Чим більше правильних відповідей — тим вищий рахунок',
+    text: 'Earn points for correct answers. Your score appears at the top!',
+    hint: 'The more correct answers — the higher your score',
   },
 ]
 
@@ -112,14 +112,14 @@ export function TutorialScreen() {
         {/* Step counter & CTA */}
         <div className="flex w-full flex-col items-center gap-3">
           <p className="text-sm text-[oklch(74%_0.04_240)]">
-            Крок {step + 1} з {tutorialSteps.length}
+            Step {step + 1} of {tutorialSteps.length}
           </p>
           <motion.button
             whileTap={{ scale: 0.96 }}
             onClick={handleNext}
             className="w-full max-w-xs rounded-2xl bg-[oklch(53%_0.25_240)] px-8 py-4 text-base font-bold text-white shadow-lg active:opacity-90"
           >
-            {isLast ? 'Почати гру 🎮' : 'Далі →'}
+            {isLast ? 'Start Playing 🎮' : 'Next →'}
           </motion.button>
         </div>
       </div>

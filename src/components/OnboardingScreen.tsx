@@ -81,7 +81,7 @@ export function OnboardingScreen() {
           {/* Bubble pointer */}
           <div className="absolute -top-3 left-6 h-0 w-0 border-x-[10px] border-b-[14px] border-x-transparent border-b-white" />
           <p className="text-center text-sm font-semibold leading-relaxed text-gray-800">
-            Привіт! Я твій гід. Хочеш дізнатися, як тут все працює?
+            Hi! I'm your guide. Want to learn how it all works?
           </p>
           {/* Sparkle decorations */}
           <span className="absolute -top-3 right-4 text-lg">✨</span>
@@ -102,7 +102,7 @@ export function OnboardingScreen() {
           className="w-full rounded-2xl bg-[oklch(53%_0.25_240)] px-8 py-4 text-base font-bold text-white shadow-xl"
           style={{ boxShadow: '0 0 30px oklch(53% 0.25 240 / 0.4)' }}
         >
-          🎓 Пройти навчання
+          🎓 Start Tutorial
         </motion.button>
         <motion.button
           id="btn-skip-tutorial"
@@ -110,7 +110,7 @@ export function OnboardingScreen() {
           onClick={() => setScreen('feed')}
           className="w-full rounded-2xl border border-[oklch(100%_0_0/0.15)] bg-[oklch(100%_0_0/0.06)] px-8 py-4 text-base font-medium text-[oklch(84%_0.04_240)] backdrop-blur-xl"
         >
-          Пропустити →
+          Skip →
         </motion.button>
       </motion.div>
     </div>
