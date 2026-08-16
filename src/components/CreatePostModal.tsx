@@ -80,7 +80,7 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
           {/* Backdrop — absolute inside relative container */}
           <motion.div
             key="create-backdrop"
-            className="absolute inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 z-40 bg-black/75"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

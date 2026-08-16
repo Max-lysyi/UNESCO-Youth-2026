@@ -17,10 +17,10 @@ export function ResultModal({ isOpen, isCorrect, post, pointsEarned, onNext, onC
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop — no backdrop-blur to avoid iOS Safari bleed-through bug */}
           <motion.div
             key="backdrop"
-            className="absolute inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 z-40 bg-black/75"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

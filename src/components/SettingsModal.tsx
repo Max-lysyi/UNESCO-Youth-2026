@@ -78,8 +78,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           {/* Backdrop */}
           <motion.div
             key="settings-backdrop"
-            className="fixed inset-0 z-[60] backdrop-blur-sm"
-            style={{ background: 'oklch(0% 0 0 / 0.5)' }}
+            className="fixed inset-0 z-[60]"
+            style={{ background: 'oklch(0% 0 0 / 0.65)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

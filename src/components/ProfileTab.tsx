@@ -145,7 +145,7 @@ export function ProfileTab() {
               style={{ background: 'oklch(53% 0.25 240)', transform: 'scale(1.15)' }}
             />
             <img
-              src="https://i.pravatar.cc/150?img=99"
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face&auto=format"
               alt="Your profile"
               className="relative h-20 w-20 rounded-full object-cover ring-2 ring-[oklch(53%_0.25_240/0.7)]"
             />
