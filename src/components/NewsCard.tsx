@@ -62,10 +62,19 @@ function Description({ text, tags, expanded, onToggle }: DescriptionProps) {
   )
 }
 
-// ── Main card ─────────────────────────────────────────────────────────────────
+// ── Main card ──────────────────────────────────────────────────────────────────
+type VerdictChoice = 'fact' | 'fake'
+
 export function NewsCard({ post, cardIndex }: NewsCardProps) {
-  const [answered, setAnswered] = useState(false)
-  const [userVerdict, setUserVerdict] = useState<'fact' | 'fake' | null>(null)
+  // ── Derive answered state from the global store ───────────────────────
+  // This prevents re-voting from FullscreenPostOverlay or any other re-render.
+  const answeredPostIds = useAppStore((s) => s.answeredPostIds)
+  const recordAnswer = useAppStore((s) => s.recordAnswer)
+  const answered = answeredPostIds.has(post.id)
+
+  // Local state for WHICH verdict was chosen (persisted via store key)
+  // We keep this in local state since it's per-render-instance display only.
+  const [userVerdict, setUserVerdict] = useState<VerdictChoice | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [commentsOpen, setCommentsOpen] = useState(false)
   const [descExpanded, setDescExpanded] = useState(false)
@@ -88,6 +97,11 @@ export function NewsCard({ post, cardIndex }: NewsCardProps) {
     userVerdict !== null &&
     ((userVerdict === 'fact' && !post.isFake) || (userVerdict === 'fake' && post.isFake))
 
+  // If the post was answered in a different NewsCard instance (e.g. main feed)
+  // but this instance is opened fresh (fullscreen overlay), we show post-answer
+  // UI but with no verdict indicator (userVerdict stays null here).
+  // This correctly blocks the Fact/Fake buttons via the `answered` flag.
+
   // ── Auto-close overlays when card scrolls out of view ────────────────────
   const closeAll = useCallback(() => {
     setModalOpen(false)
@@ -108,11 +122,11 @@ export function NewsCard({ post, cardIndex }: NewsCardProps) {
     return () => observer.disconnect()
   }, [closeAll])
 
-  // ── Handlers ─────────────────────────────────────────────────────────────
-  const handleVerdict = (verdict: 'fact' | 'fake') => {
-    if (answered) return
+  // ── Handlers ──────────────────────────────────────────────────────────────────
+  const handleVerdict = (verdict: VerdictChoice) => {
+    if (answered) return           // already voted globally — hard block
     setUserVerdict(verdict)
-    setAnswered(true)
+    recordAnswer(post.id)          // persist to store — blocks all re-renders
     if ((verdict === 'fact' && !post.isFake) || (verdict === 'fake' && post.isFake)) {
       addScore(10)
     }

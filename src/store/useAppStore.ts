@@ -25,6 +25,10 @@ interface AppState {
   likedPostIds: Set<string>
   toggleLike: (postId: string) => void
 
+  // ── Answered Posts (prevents re-voting on same post) ─────────────────────
+  answeredPostIds: Set<string>
+  recordAnswer: (postId: string) => void
+
   // ── Created Posts ─────────────────────────────────────────────────────────
   createdPostIds: string[]
 
@@ -83,6 +87,15 @@ export const useAppStore = create<AppState>((set) => ({
         next.add(postId)
       }
       return { likedPostIds: next }
+    }),
+
+  // ── Answered Posts ────────────────────────────────────────────────────────
+  answeredPostIds: new Set<string>(),
+  recordAnswer: (postId) =>
+    set((state) => {
+      const next = new Set(state.answeredPostIds)
+      next.add(postId)
+      return { answeredPostIds: next }
     }),
 
   // ── Created Posts ─────────────────────────────────────────────────────────
